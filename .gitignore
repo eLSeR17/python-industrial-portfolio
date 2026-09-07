@@ -1,0 +1,51 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# ---- Virtual environments ----
+.venv/
+venv/
+env/
+ENV/
+
+# ---- Testing / coverage ----
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.cache/
+pytest_cache/
+
+# ---- Environment / secrets (keep .env.example templates) ----
+.env
+.env.*
+!.env.example
+
+# ---- Internal scaffolding (kept locally, not published) ----
+.specs/
+
+# ---- Notebooks ----
+.ipynb_checkpoints/
+
+# ---- Databases / binaries ----
+*.db
+*.sqlite3
+*.sqlite
+*.dylib
+
+# ---- IDEs / editors ----
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---- OS ----
+.DS_Store
+Thumbs.db

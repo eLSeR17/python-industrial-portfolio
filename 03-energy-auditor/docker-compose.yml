@@ -1,0 +1,65 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://energy:energy@postgres:5432/energy_auditor
+      DATABASE_URL_SYNC: postgresql+psycopg2://energy:energy@postgres:5432/energy_auditor
+      REDIS_URL: redis://redis:6379/0
+      DEBUG: "false"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - energy-net
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: energy_auditor
+      POSTGRES_USER: energy
+      POSTGRES_PASSWORD: energy
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U energy -d energy_auditor"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - energy-net
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - energy-net
+
+volumes:
+  pgdata:
+
+networks:
+  energy-net:
+    driver: bridge

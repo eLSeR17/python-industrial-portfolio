@@ -1,0 +1,73 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DOC_INT_DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/doc_intelligence
+      DOC_INT_REDIS_URL: redis://redis:6379/0
+      DOC_INT_CELERY_BROKER_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - doc-intel-net
+    volumes:
+      - ./data:/app/data:ro
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: doc_intelligence
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - doc-intel-net
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - doc-intel-net
+
+  celery_worker:
+    build: .
+    command: celery -A src.workers.celery_app worker --loglevel=info --concurrency=2
+    environment:
+      DOC_INT_DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/doc_intelligence
+      DOC_INT_REDIS_URL: redis://redis:6379/0
+      DOC_INT_CELERY_BROKER_URL: redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - doc-intel-net
+    volumes:
+      - ./data:/app/data:ro
+
+volumes:
+  pgdata:
+
+networks:
+  doc-intel-net:
+    driver: bridge
