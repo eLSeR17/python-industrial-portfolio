@@ -19,7 +19,7 @@ class ScenarioRunner:
             tests.
     """
 
-    def __init__(self, engine_class: Type[SimulationEngine] | None = None) -> None:
+    def __init__(self, engine_class: Type["SimulationEngine"] | None = None) -> None:
         self.engine_class = engine_class or SimulationEngine
 
     def run_scenario(

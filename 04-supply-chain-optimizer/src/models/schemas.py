@@ -94,7 +94,7 @@ class RouteOptimizeRequest(BaseModel):
 
 class RouteOptimizeResponse(BaseModel):
     """Optimized routes for a fleet."""
-    routes: list[RouteResult]
+    routes: list["RouteResult"]
     total_distance_km: float
     total_cost: float
     total_time_hours: float
@@ -141,7 +141,7 @@ class InventoryOptimizeResponse(BaseModel):
 
 class BullwhipRequest(BaseModel):
     """Multi-echelon inventory parameters for bullwhip analysis."""
-    echelons: list[EchelonInventory]
+    echelons: list["EchelonInventory"]
 
 
 class EchelonInventory(BaseModel):

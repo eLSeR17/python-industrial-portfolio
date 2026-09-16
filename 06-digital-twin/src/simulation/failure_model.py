@@ -48,7 +48,7 @@ class WeibullFailureModel:
     @classmethod
     def from_mtbf_mttr(
         cls, mtbf: float, mttr: float, shape: float = 2.0
-    ) -> WeibullFailureModel:
+    ) -> "WeibullFailureModel":
         """Create a failure model from Mean Time Between Failures and MTTR.
 
         The scale (eta) is derived so that the Weibull mean equals *mtbf*.
