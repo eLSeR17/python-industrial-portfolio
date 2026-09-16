@@ -6,6 +6,8 @@
 > continuous production lines.
 >
 > **8 projects, ~190 Python files, full test suites**
+[![CI](https://github.com/eLSeR17/python-industrial-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/eLSeR17/python-industrial-portfolio/actions)
+
 
 ## Portfolio Overview
 
