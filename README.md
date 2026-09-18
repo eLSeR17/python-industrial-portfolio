@@ -11,16 +11,23 @@
 
 ## Portfolio Overview
 
-| # | Project | Core Tech | Industry Impact | Tests |
+| # | Project | Core Tech | Impact target † | Tests |
 |---|---------|-----------|-----------------|-------|
-| 1 | [Predictive Maintenance Engine](./01-predictive-maintenance/) | FastAPI, scikit-learn, TimescaleDB | ↓ 25-30% unplanned downtime costs | 100 |
-| 2 | [Real-Time Process Optimizer](./02-process-optimizer/) | NumPy, Kafka, Redis, asyncio | ↑ 15-20% throughput, ↓ waste | 51 |
-| 3 | [Industrial Energy Auditor](./03-energy-auditor/) | Pandas, Dash, PostgreSQL | ↓ 10-15% energy costs | 66 |
-| 4 | [Supply Chain Cost Analyzer](./04-supply-chain-optimizer/) | NetworkX, PuLP, FastAPI | ↓ 12-18% logistics costs | 96 |
-| 5 | [Computer Vision Quality Inspector](./05-vision-inspector/) | OpenCV, YOLOv8, FastAPI | ↓ 90% inspection cost vs manual | 56 |
+| 1 | [Predictive Maintenance Engine](./01-predictive-maintenance/) | FastAPI, scikit-learn, TimescaleDB | ↓ 25-30% unplanned downtime costs † | 100 |
+| 2 | [Real-Time Process Optimizer](./02-process-optimizer/) | NumPy, Kafka, Redis, asyncio | ↑ 15-20% throughput, ↓ waste † | 51 |
+| 3 | [Industrial Energy Auditor](./03-energy-auditor/) | Pandas, Dash, PostgreSQL | ↓ 10-15% energy costs † | 66 |
+| 4 | [Supply Chain Cost Analyzer](./04-supply-chain-optimizer/) | NetworkX, PuLP, FastAPI | ↓ 12-18% logistics costs † | 96 |
+| 5 | [Computer Vision Quality Inspector](./05-vision-inspector/) | OpenCV, YOLOv8, FastAPI | ↓ 90% inspection cost vs manual † | 56 |
 | 6 | [Digital Twin Simulator](./06-digital-twin/) | SimPy, MQTT, FastAPI | Risk-free plant simulation | 14 |
-| 7 | [Document Intelligence](./07-doc-intelligence/) | spaCy, PyMuPDF, Celery | ↓ 85% compliance processing time | 38 |
+| 7 | [Document Intelligence](./07-doc-intelligence/) | spaCy, PyMuPDF, Celery | ↓ 85% compliance processing time † | 38 |
 | 8 | [Fleet & Asset Tracker](./08-fleet-tracker/) | SQLAlchemy, WebSocket, Leaflet | Real-time industrial asset visibility | 51 |
+
+> † **Impact targets** — design estimates based on industry benchmarks for each
+> class of system (predictive maintenance programs, statistical process
+> control, energy audits, automated visual inspection, document automation),
+> not measurements from a specific plant. Each project shows the mechanism
+> that produces the improvement. See
+> [*How to read the impact numbers*](#how-to-read-the-impact-numbers).
 
 ## Architecture
 
@@ -105,6 +112,45 @@ cd 02-process-optimizer
 pip install -r requirements.txt
 python -m pytest tests/ -v
 ```
+
+## How to read the impact numbers
+
+The impact column states **design targets, not measured results**: these
+systems come from real industrial practice, but no single plant runs all
+eight, so there is no single measurement to report. What you *can* verify is
+the **mechanism** — each project shows in code and tests exactly how the
+improvement is produced. The ranges are the ones the industry reports for each
+class of system:
+
+- **01 · Predictive Maintenance Engine → ↓ 25-30% unplanned downtime**. PdM
+  programs consistently report 25-30% downtime reduction (reliability
+  engineering literature). Mechanism: anomaly detection on streaming sensor
+  data (Isolation Forest) plus failure prediction (Random Forest) with the
+  lead time needed to intervene before the breakdown.
+- **02 · Real-Time Process Optimizer → ↑ 15-20% throughput, ↓ waste**.
+  Mechanism: SPC (X-bar/R, CUSUM, EWMA) + auto-tuned PID keep the process
+  inside its target window — less drift, less scrap and rework. 15-20% is the
+  documented range for SPC-driven process stabilization.
+- **03 · Industrial Energy Auditor → ↓ 10-15% energy costs**. Energy audits
+  typically identify 10-20% savings potential; this system operationalizes the
+  audit: load profiling, TOU tariff analysis, anomaly detection and ISO 50001
+  EnPIs turn that potential into a tracked program.
+- **04 · Supply Chain Cost Analyzer → ↓ 12-18% logistics costs**. Mechanism:
+  EOQ + safety stock cut inventory costs, VRP (MILP) cuts transport km — the
+  combined range documented for inventory + routing optimization.
+- **05 · Computer Vision Quality Inspector → ↓ 90% inspection cost vs
+  manual**. Mechanism: automated visual inspection (YOLOv8 + classical CV)
+  replaces a manual operator reading — the marginal cost of machine inspection
+  is a small fraction of operator time. 80-95% cost reduction is the
+  documented range for CV-based QA in manufacturing.
+- **07 · Document Intelligence → ↓ 85% compliance processing time**. Mechanism:
+  PDF parsing + spaCy NER + automated GHS/OSHA rule checks turn multi-hour
+  manual reviews into minutes — the documented range for compliance-document
+  automation.
+
+That is the honest framing: **benchmarked targets with a code-visible
+mechanism**, not unverifiable measurement claims. If someone asks *"how do you
+know?"*, the answer starts with the mechanism, not the number.
 
 ## Project Summaries
 
